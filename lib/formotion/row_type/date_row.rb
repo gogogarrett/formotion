@@ -58,6 +58,13 @@ module Formotion
           picker.countDownDuration = self.row.value if row.picker_mode == :countdown
           picker.minuteInterval = self.row.minute_interval if self.row.minute_interval
 
+          if self.row.min_day_range
+            picker.setMinimumDate(range_date_for(-self.row.min_day_range.to_i))
+          end
+          if self.row.max_day_range
+            picker.setMaximumDate(range_date_for(self.row.max_day_range.to_i))
+          end
+
           picker.when(UIControlEventValueChanged) do
             if self.row.picker_mode == :countdown
               self.row.value = @picker.countDownDuration
@@ -128,6 +135,22 @@ module Formotion
       def update_text_field(new_value)
         self.row.text_field.text = self.formatted_value
       end
+
+      private
+
+      def gregorian_calendar
+        @gregorian_calendar ||= NSCalendar.alloc.initWithCalendarIdentifier(NSGregorianCalendar)
+      end
+
+      def offset_components
+        @offset_components ||= NSDateComponents.alloc.init
+      end
+
+      def range_date_for(range)
+        offset_components.setWeekday(range)
+        gregorian_calendar.dateByAddingComponents(offset_components, toDate: NSDate.alloc.init, options:0)
+      end
+
     end
   end
 end

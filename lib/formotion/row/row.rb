@@ -107,6 +107,10 @@ module Formotion
       # DEFAULT is :blue
       :selection_style,
 
+      # Allows for range to be specified in a date picker
+      :min_day_range,
+      :max_day_range,
+
       # The following apply only to weblink rows
 
       # Whether or not to display a warning to the user before leaving the app.
